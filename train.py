@@ -39,7 +39,7 @@ def get_data_splits(data_path, test_size=0.2, validation_size=0.1):
     return X_train, X_validation, X_test, y_train, y_validation, y_test
 
 
-def build_model(input_shape, learning_rate, error='sparse_categorial_crossentropy'):
+def build_model(input_shape, learning_rate, error='sparse_categorical_crossentropy'):
     
     # build network
     model = keras.Sequential()
