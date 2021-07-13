@@ -50,7 +50,7 @@ def build_model(input_shape, learning_rate, error='sparse_categorial_crossentrop
                                   kernel_regularizer=keras.regularizers.l2(0.001)))
 
     model.add(keras.layers.BatchNormalization())
-    model.add(keras.layers.MaxPool2D((2,2), strides=(2,2), padding='same'))
+    model.add(keras.layers.MaxPool2D((3,3), strides=(2,2), padding='same'))
 
     # conv layer 2
     model.add(keras.layers.Conv2D(32, (3, 3), activation='relu', 
@@ -60,7 +60,7 @@ def build_model(input_shape, learning_rate, error='sparse_categorial_crossentrop
     model.add(keras.layers.MaxPool2D((3, 3), strides=(2,2), padding='same'))
 
     # conv layer 3
-    model.add(keras.layers.Conv2D(32, (3, 3), activation='relu', 
+    model.add(keras.layers.Conv2D(32, (2, 2), activation='relu', 
                                 kernel_regularizer=keras.regularizers.l2(0.001)))
 
     model.add(keras.layers.BatchNormalization()) 
