@@ -1,47 +1,79 @@
-import tensorflow.keras as keras
-import numpy as np 
+import librosa
+import tensorflow as tf
+import numpy as np
 
-MODEL_PATH = 'model.h5'
+SAVED_MODEL_PATH = "model.h5"
+SAMPLES_TO_CONSIDER = 22050
 
 class _Keyword_Spotting_Service:
 
     model = None
-    _mappings = [
-        'down',
-        'off',
-        'on',
-        'no',
-        'yes',
-        'stop',
-        'up',
-        'right',
-        'left',
-        'go'
+    _mapping = [
+        "down",
+        "off",
+        "on",
+        "no",
+        "yes",
+        "stop",
+        "up",
+        "right",
+        "left",
+        "go"
     ]
+    _instance = None
 
-    _instance = None 
 
     def predict(self, file_path):
 
-        # extrat MFCCs
-        MFCCs = self.preprocess(file_path) # (# segments, # coefficients)
-        
-        # convert 2D MFCCs array into 4d array -> (# samples, # segments, # coefficients, # channels)
+        # extract MFCC
+        MFCCs = self.preprocess(file_path)
+
+        # we need a 4-dim array to feed to the model for prediction: (# samples, # time steps, # coefficients, 1)
         MFCCs = MFCCs[np.newaxis, ..., np.newaxis]
 
-        # make predictions
-        predictions = self.model.predict(MFCCs) # [ [0.1, 0.5, 0.3, ...] ]
+        # get the predicted label
+        predictions = self.model.predict(MFCCs)
         predicted_index = np.argmax(predictions)
+        predicted_keyword = self._mapping[predicted_index]
+        return predicted_keyword
 
-    def preprocess(self, file_path):
-        pass
 
-def Keyword_spotting_Service():
+    def preprocess(self, file_path, num_mfcc=13, n_fft=2048, hop_length=512):
 
-    # ensure that we only have 1 instance
+        # load audio file
+        signal, sample_rate = librosa.load(file_path)
+
+        if len(signal) >= SAMPLES_TO_CONSIDER:
+            # ensure consistency of the length of the signal
+            signal = signal[:SAMPLES_TO_CONSIDER]
+
+            # extract MFCCs
+            MFCCs = librosa.feature.mfcc(signal, sample_rate, n_mfcc=num_mfcc, n_fft=n_fft,
+                                         hop_length=hop_length)
+        return MFCCs.T
+
+
+def Keyword_Spotting_Service():
+
+    # ensure an instance is created only the first time the factory function is called
     if _Keyword_Spotting_Service._instance is None:
-        Keyword_spotting_Service._instance = _Keyword_Spotting_Service()
-        _Keyword_Spotting_Service.model = keras.model.load_model(MODEL_PATH)
+        _Keyword_Spotting_Service._instance = _Keyword_Spotting_Service()
+        _Keyword_Spotting_Service.model = tf.keras.models.load_model(SAVED_MODEL_PATH)
     return _Keyword_Spotting_Service._instance
 
-    
+
+
+
+if __name__ == "__main__":
+
+    # create 2 instances of the keyword spotting service
+    kss = Keyword_Spotting_Service()
+    kss1 = Keyword_Spotting_Service()
+
+    # check that different instances of the keyword spotting service point back to the same object (singleton)
+    assert kss is kss1
+
+    # make a prediction
+    keyword = kss.predict("test/down.wav")
+    keyword = kss.predict("test/left.wav")
+    print(keyword)
