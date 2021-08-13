@@ -4,3 +4,4 @@ speech dataset
 .vscode
 data.json
 test
+__pycache__
