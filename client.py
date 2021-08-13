@@ -5,7 +5,7 @@ URL = "http://127.0.0.1:5050/predict"
 
 
 # audio file we'd like to send for predicting keyword
-FILE_PATH = "test/left.wav"
+FILE_PATH = "test/down.wav"
 
 
 if __name__ == "__main__":
