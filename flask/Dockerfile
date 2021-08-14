@@ -1,5 +1,5 @@
 # pull tensorflow image with python3 
-FROM tensorflow/tensorflow:2.6.0-py3
+FROM tensorflow/tensorflow:2.1.0-py3
 
 # set the working directory to /app
 WORKDIR /app
