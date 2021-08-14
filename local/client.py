@@ -1,7 +1,8 @@
 import requests
 
 # server url
-URL = "http://127.0.0.1/predict"
+# URL = "http://127.0.0.1/predict"
+URL = "http://3.6.86.75/predict"        # aws ec2 instance public address
 
 
 # audio file we'd like to send for predicting keyword
