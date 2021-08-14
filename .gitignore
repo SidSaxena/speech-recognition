@@ -5,3 +5,4 @@ speech dataset
 data.json
 test
 __pycache__
+venv
