@@ -1,4 +1,4 @@
-# Deploy a Speech Recognition model for simple Speech Recognition on AWS.
+# Deploy a Speech Recognition System for simple Speech Recognition on AWS.
 * *Modeled a Convolutional Neural Network in Keras/Tensorflow using Google's Speech Commands Dataset*
 * *Implemented a Flask Server*
 * *Deployed a Docker Container with uWSGI and NGINX implementation*
